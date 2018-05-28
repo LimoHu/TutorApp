@@ -5,16 +5,14 @@
 </template>
 
 <script type='text/ecmascript-6'>
-  export default {
-
-  };
+  export default {};
 </script>
 
 <style lang='stylus' rel='stylesheet/stylus'>
     .header
       width 100%
       display flex
-      background #43CD80
+      background #0c9
       height 38px
       font-size 0
 </style>

@@ -4,25 +4,27 @@
     <div class="content">
       <ul>
         <li v-for="(recruit,index) in recruitList" :key="index" class="recruit-item">
-          <div class="pic">
-            <img src="static/images/head_pic2.jpg" alt="" >
-          </div>
-          <div class="info">
-            <h1>
-              <span class="name">{{recruit.username}}</span>
-              <span class="grade">{{recruit.grade}}</span>
-              <div class="price">
-                ¥&nbsp;{{recruit.pay}}
-                <span class="limit">起</span>
-              </div>
-            </h1>
-            <p>
-              <span>{{recruit.location}}</span>
-            </p>
-            <p>
-              <span>{{recruit.detail}}</span>
-            </p>
-          </div>
+          <router-link :to="{path:'/recruitdetail',query:{recruitId: recruit.recruitId}}">
+            <div class="pic">
+              <img src="static/images/head_pic2.jpg" alt="" >
+            </div>
+            <div class="info">
+              <h1>
+                <span class="name">{{recruit.username}}</span>
+                <span class="grade">{{recruit.grade}}</span>
+                <div class="price">
+                  ¥&nbsp;{{recruit.pay}}
+                  <span class="limit">起</span>
+                </div>
+              </h1>
+              <p>
+                <span>{{recruit.location}}</span>
+              </p>
+              <p>
+                <span>{{recruit.detail}}</span>
+              </p>
+            </div>
+          </router-link>
         </li>
       </ul>
     </div>
@@ -41,7 +43,7 @@
       let param = {
         'url': '/TutorWebsite/RecruitInfo/recruitInfoList.do',
         'currentPage': 1,
-        'pageSize': 5
+        'pageSize': 10
       };
       this.$http.post(param.url, param, {emulateJSON: true}).then(response => {
         response = response.body;
@@ -66,13 +68,14 @@
     width 100%
     font-size 0
     .recruit-item
-      display flex
       padding 10px
       box-sizing border-box
       border-1px (rgba(7, 17, 27, .1))
       &:last-child
         border-none()
         margin-bottom: 0
+      a
+        display flex
       .pic
         flex 0 0 48px
         text-align center

@@ -54,10 +54,10 @@ export default {
       background-repeat no-repeat
     &.star-48
       .star-item
-        width: 20px
-        height: 20px
-        margin-right: 22px
-        background-size: 20px 20px
+        width: 12px
+        height: 12px
+        margin-right: 2px
+        background-size: 12px 12px
         &:last-child
           margin-right: 0
         &.on

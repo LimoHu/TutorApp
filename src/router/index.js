@@ -5,6 +5,8 @@ import recruit from 'components/recruit/recruit';
 import discovery from 'components/discovery/discovery';
 import tutor from 'components/tutor/tutor';
 import mine from 'components/mine/mine';
+import tutordetail from 'components/tutor/tutordetail';
+import recruitdetail from 'components/recruit/recruitdetail';
 
 Vue.use(Router);
 
@@ -26,6 +28,12 @@ const routes = [{
 }, {
   path: '/mine',
   component: mine
+}, {
+  path: '/tutordetail',
+  component: tutordetail
+}, {
+  path: '/recruitdetail',
+  component: recruitdetail
 }];
 
 // 实例化一个router
