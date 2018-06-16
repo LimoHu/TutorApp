@@ -1,23 +1,31 @@
 <template>
   <div class="discovery">
     <div class="header"></div>
-    <div class="content">
-      <ul>
-        <li v-for="(discovery, index) in discoveries" :key="index" class="discovery-item">
-          <div class="left-pic">
-            <img src="static/images/head_pic3.jpg" alt="文章图片" class="">
-          </div>
-          <div class="right-content">
-            <h2>{{discovery.title}}</h2>
-            <p>{{discovery.content}}</p>
-          </div>
-        </li>
-      </ul>
-    </div>
+    <scroll class="discoveries-content">
+      <div>
+        <ul>
+          <li v-for="(discovery, index) in discoveries" :key="index" class="discovery-item">
+            <div class="left-pic">
+              <img src="static/images/head_pic3.jpg" alt="文章图片" class="">
+            </div>
+            <div class="right-content">
+              <h2>{{discovery.title}}</h2>
+              <p>{{discovery.content}}</p>
+            </div>
+          </li>
+        </ul>
+      </div>
+      <div v-show="!discoveries.length" class="loading-container">
+        <loading></loading>
+      </div>
+    </scroll>
   </div>
 </template>
 
 <script type='text/ecmascript-6'>
+  import Scroll from 'base/scroll/scroll';
+  import Loading from 'base/loading/loading';
+
   export default {
     data() {
       return {
@@ -60,6 +68,10 @@
           }
         ]
       };
+    },
+    components: {
+      Scroll,
+      Loading
     }
   };
 </script>
@@ -68,11 +80,13 @@
   .header
     width 100%
     display flex
-    background #43CD80
+    background #0c9
     height 38px
     font-size 0
-  .content
+  .discoveries-content
     width 100%
+    height 588px
+    overflow hidden
     .discovery-item
         display flex
         width 100%
@@ -95,4 +109,9 @@
            font-size 10px
            color #93999f
            line-height 15px
+    .loading-container
+      position absolute
+      width 100%
+      top 20%
+      transform: translateY(-50%)
 </style>

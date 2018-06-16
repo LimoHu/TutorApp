@@ -3,13 +3,11 @@
 import Vue from 'vue';
 import App from './App';
 import router from './router/index.js';
-import VueResource from 'vue-resource';
 import VueAwesomeSwiper from 'vue-awesome-swiper';
 import 'swiper/dist/css/swiper.css';
 import 'common/stylus/index.styl';
 
 Vue.use(VueAwesomeSwiper);
-Vue.use(VueResource);
 
 /* eslint-disable no-new */
 new Vue({

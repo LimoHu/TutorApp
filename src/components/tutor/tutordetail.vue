@@ -1,102 +1,105 @@
 <template>
-  <div class="tutordetail">
-    <div class="tutordetail-header">
-      <i class="icon-home"></i>
-      <span>家教详细信息</span>
-    </div>
-    <div class="tutordetail-content">
-      <div class="basicinfo">
-        <div class="pic">
-          <img src="static/images/head_pic8.jpg" alt="用户头像">
+  <transition name="slide">
+    <div class="tutordetail">
+      <div class="tutordetail-header">
+        <i class="icon-home"></i>
+        <span>家教详细信息</span>
+      </div>
+      <div class="tutordetail-content">
+        <div class="basicinfo">
+          <div class="pic">
+            <img src="static/images/head_pic8.jpg" alt="用户头像">
+          </div>
+          <div class="info">
+            <h1>
+              <span>{{detail.username}}&nbsp;|</span>
+              <span>{{detail.teachexperience}}年</span>
+            </h1>
+            <star :size="48" :score="4.5"></star>
+            <p>武汉纺织大学&nbsp;|&nbsp;大二</p>
+          </div>
         </div>
-        <div class="info">
-          <h1>
-            <span>{{detail.username}}&nbsp;|</span>
-            <span>{{detail.teachexperience}}年</span>
-          </h1>
-          <star :size="48" :score="4.5"></star>
-          <p>武汉纺织大学&nbsp;|&nbsp;大二</p>
+        <div class="detail">
+          <p>
+            <span>试讲时间：{{detail.try_teachtime}}</span>
+            <span>试讲价格：免费试讲</span>
+          </p>
+          <p>
+            <span>授课阶段：小学语数外</span>
+            <span>授课价格：{{detail.try_price}}</span>
+          </p>
+          <p>个人说明：{{detail.introduction}}</p>
+        </div>
+        <div class="teachtime">
+          <h1>== 授课时间==</h1>
+          <table>
+            <thead>
+              <tr>
+                <td>授课时间</td>
+                <td>周一</td>
+                <td>周二</td>
+                <td>周三</td>
+                <td>周四</td>
+                <td>周五</td>
+                <td>周六</td>
+                <td>周日</td>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>上午</td>
+                <td>√</td>
+                <td></td>
+                <td></td>
+                <td>√</td>
+                <td></td>
+                <td>√</td>
+                <td>√</td>
+              </tr>
+              <tr>
+                <td>下午</td>
+                <td></td>
+                <td></td>
+                <td>√</td>
+                <td>√</td>
+                <td></td>
+                <td>√</td>
+                <td>√</td>
+              </tr>
+              <tr>
+                <td>晚上</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>√</td>
+                <td></td>
+                <td></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="evaluations">
+          <p class="icons">
+            <i class="icon-collect"></i>
+            <span>(4)</span>
+            <i class="icon-evaluation"></i>
+            <span>(2)</span>
+          </p>
+          <ul>
+            <li v-for="(evaluation,index) in evaluations" :key="index" class="evaluation-item">
+              <p>{{evaluation}}</p>
+            </li>
+          </ul>
         </div>
       </div>
-      <div class="detail">
-        <p>
-          <span>试讲时间：{{detail.try_teachtime}}</span>
-          <span>试讲价格：免费试讲</span>
-        </p>
-        <p>
-          <span>授课阶段：小学语数外</span>
-          <span>授课价格：{{detail.try_price}}</span>
-        </p>
-        <p>个人说明：{{detail.introduction}}</p>
-      </div>
-      <div class="teachtime">
-        <h1>== 授课时间==</h1>
-        <table>
-          <thead>
-            <tr>
-              <td>授课时间</td>
-              <td>周一</td>
-              <td>周二</td>
-              <td>周三</td>
-              <td>周四</td>
-              <td>周五</td>
-              <td>周六</td>
-              <td>周日</td>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>上午</td>
-              <td>√</td>
-              <td></td>
-              <td></td>
-              <td>√</td>
-              <td></td>
-              <td>√</td>
-              <td>√</td>
-            </tr>
-            <tr>
-              <td>下午</td>
-              <td></td>
-              <td></td>
-              <td>√</td>
-              <td>√</td>
-              <td></td>
-              <td>√</td>
-              <td>√</td>
-            </tr>
-            <tr>
-              <td>晚上</td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td>√</td>
-              <td></td>
-              <td></td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <div class="evaluations">
-        <p class="icons">
-          <i class="icon-collect"></i>
-          <span>(4)</span>
-          <i class="icon-evaluation"></i>
-          <span>(2)</span>
-        </p>
-        <ul>
-          <li v-for="(evaluation,index) in evaluations" :key="index" class="evaluation-item">
-            <p>{{evaluation}}</p>
-          </li>
-        </ul>
-      </div>
     </div>
-  </div>
+  </transition>
 </template>
 
 <script type='text/ecmascript-6'>
- import star from 'components/star/star.vue';
+  import star from 'components/star/star.vue';
+  import {ERR_OK, tutorDetail} from 'api/index';
   export default {
     data() {
       return {
@@ -109,17 +112,20 @@
       };
     },
     created() {
-      let userId = this.$route.query.userId;
-      let param = {
-        'url': '/TutorWebsite/TutorDetailInfo/tutorDetail.do',
-        'userId': userId
-      };
-      this.$http.post(param.url, param, {emulateJSON: true}).then(response => {
-        if (response.body.code === '0000') {
-          this.detail = response.body.data;
-          console.log(this.detail);
-        }
-      });
+      this._getTutorDetail();
+    },
+    methods: {
+      _getTutorDetail() {
+        let userId = this.$route.params.userId;
+        tutorDetail(userId).then(response => {
+          response = response.data;
+          if (response.code === ERR_OK) {
+            this.detail = response.data;
+          }
+        }).catch(error => {
+          console.log(error);
+        });
+      }
     },
     components: {
       star
@@ -129,6 +135,14 @@
 
 <style lang='stylus' rel='stylesheet/stylus'>
 @import "../../common/stylus/mixin";
+.tutordetail
+  position fixed
+  z-index 100
+  top 0
+  left 0
+  right 0
+  bottom 0
+  background #ffffff
   .tutordetail-header
       width 100%
       display flex
@@ -225,4 +239,12 @@
             line-height 15px
             font-size 12px
             color #93999f
+.slide-enter-active,.slide-leave-active
+    transition all .5s ease-out
+.slide-enter
+    transform translateX(500px)
+    opacity 0
+.slide-leave-active
+    transform translateX(500px)
+    opacity 0
 </style>

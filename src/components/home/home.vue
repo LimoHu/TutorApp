@@ -13,71 +13,74 @@
         <img src="static/images/msg.png" alt="消息" class="msg-inco">
       </div>
     </div>
-    <div class="content">
-      <swiper></swiper>
-      <div class="search-items"></div>
-      <div class="headlines">
-        <div class="title">
-          <span>招聘头条</span>
+    <scroll :data="tutorList" ref="scroll" class="content">
+      <div>
+        <swiper></swiper>
+        <div class="search-items"></div>
+        <div class="headlines">
+          <div class="title">
+            <span>招聘头条</span>
+          </div>
+          <div class="lines">
+            <textSwiper></textSwiper>
+          </div>
+          <div class="to-more">
+            <img src="static/images/to-more.png" alt="更多">
+          </div>
         </div>
-        <div class="lines">
-          <textSwiper></textSwiper>
-        </div>
-        <div class="to-more">
-          <img src="static/images/to-more.png" alt="更多">
-        </div>
-      </div>
-      <div class="tutors">
-        <h1>== 优质家教 ==</h1>
-        <ul>
-          <li v-for="(tutor,index) in tutorList" :key="index" class="tuor-item">
-            <router-link :to="{path:'/tutordetail',query: {userId: tutor[0].userId}}">
-              <div class="tutor-left">
-                <p>
-                  <img src="static/images/head_pic2.jpg" alt="用户头像">
-                  <span>{{tutor[0].realname}}&nbsp;|</span>
-                  <span>{{tutor[0].teachexperience}}年&nbsp;|&nbsp;</span>
-                  <span>{{tutor[0].identity}}</span>
-                </p>
-                <p>{{tutor[0].introduction}}</p>
-            </div>
-            </router-link>
-            <router-link :to="{path:'/tutordetail',query: {userId: tutor[1].userId}}">
-              <div class="tutor-right">
-                <p>
-                  <img src="static/images/head_pic1.jpg" alt="用户头像">
-                  <span>{{tutor[1].realname}}&nbsp;|</span>
-                  <span>{{tutor[1].teachexperience}}年&nbsp;|&nbsp;</span>
-                  <span>{{tutor[1].identity}}</span>
-                </p>
-                <p>{{tutor[1].introduction}}</p>
+        <div class="tutors">
+          <h1>== 优质家教 ==</h1>
+          <ul>
+            <li v-for="(tutor,index) in tutorList" :key="index" class="tuor-item">
+              <router-link :to="{path:'/tutordetail',query: {userId: tutor[0].userId}}">
+                <div class="tutor-left">
+                  <p>
+                    <img src="static/images/head_pic2.jpg" alt="用户头像">
+                    <span>{{tutor[0].realname}}&nbsp;|</span>
+                    <span>{{tutor[0].teachexperience}}年&nbsp;|&nbsp;</span>
+                    <span>{{tutor[0].identity}}</span>
+                  </p>
+                  <p>{{tutor[0].introduction}}</p>
               </div>
-            </router-link>
-          </li>
-        </ul>
-      </div>
-      <div class="discories">
-        <h1>== 最新发现 ==</h1>
-        <ul>
-          <li v-for="(discovery, index) in discoveries" :key="index" class="discovery-item">
-            <div class="left-pic">
-              <img src="static/images/head_pic3.jpg" alt="文章图片" class="">
-            </div>
-            <div class="right-content">
-              <h2>{{discovery.title}}</h2>
-              <p>{{discovery.content}}</p>
-            </div>
-          </li>
-        </ul>
-      </div>
+              </router-link>
+              <router-link :to="{path:'/tutordetail',query: {userId: tutor[1].userId}}">
+                <div class="tutor-right">
+                  <p>
+                    <img src="static/images/head_pic1.jpg" alt="用户头像">
+                    <span>{{tutor[1].realname}}&nbsp;|</span>
+                    <span>{{tutor[1].teachexperience}}年&nbsp;|&nbsp;</span>
+                    <span>{{tutor[1].identity}}</span>
+                  </p>
+                  <p>{{tutor[1].introduction}}</p>
+                </div>
+              </router-link>
+            </li>
+          </ul>
+        </div>
+        <div class="discories">
+          <h1>== 最新发现 ==</h1>
+          <ul>
+            <li v-for="(discovery, index) in discoveries" :key="index" class="discovery-item">
+              <div class="left-pic">
+                <img src="static/images/head_pic3.jpg" alt="文章图片" class="">
+              </div>
+              <div class="right-content">
+                <h2>{{discovery.title}}</h2>
+                <p>{{discovery.content}}</p>
+              </div>
+            </li>
+          </ul>
+        </div>
     </div>
+    </scroll>
   </div>
 </template>
 
 <script type='text/ecmascript-6'>
-  import swiper from 'components/swiper/swiper';
-  import textSwiper from 'components/swiper/textswiper';
-  const ERR_OK = '0000';
+  import Scroll from 'base/scroll/scroll';
+  import Swiper from 'components/swiper/swiper';
+  import TextSwiper from 'components/swiper/textswiper';
+  import {ERR_OK, tutorDetailRecommend} from 'api/index';
   export default {
     data() {
       return {
@@ -99,21 +102,26 @@
       };
     },
     created() {
-      let param = {
-        'url': '/TutorWebsite/TutorDetailInfo/tutorDetailInfoFour.do'
-      };
-      this.$http.post(param.url, param, {emulateJSON: true}).then(response => {
-        response = response.body;
-        if (response.code === ERR_OK) {
-          this.tutorList.push([response.data[0], response.data[1]]);
-          this.tutorList.push([response.data[2], response.data[3]]);
-          this.tutorList.push([response.data[4], response.data[5]]);
-        }
-      });
+      this._getTutorRecomend();
+    },
+    methods: {
+      _getTutorRecomend() {
+        tutorDetailRecommend().then(response => {
+          response = response.data;
+          if (response.code === ERR_OK) {
+            this.tutorList.push([response.data[0], response.data[1]]);
+            this.tutorList.push([response.data[2], response.data[3]]);
+            this.tutorList.push([response.data[4], response.data[5]]);
+          }
+        }).catch(error => {
+          console.log(error);
+        });
+      }
     },
     components: {
-      swiper,
-      textSwiper
+      Swiper,
+      TextSwiper,
+      Scroll
     }
   };
 </script>
@@ -180,8 +188,11 @@
         width 15px
         height 15px
   .content
+    position relative
     width 100%
     font-size 0
+    height: 588px
+    overflow hidden
     .headlines
       display flex
       height 72px

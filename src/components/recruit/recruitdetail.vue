@@ -21,6 +21,7 @@
 </template>
 
 <script type='text/ecmascript-6'>
+import {ERR_OK, recruitDetail} from 'api/index';
   export default {
     data() {
       return {
@@ -28,17 +29,20 @@
       };
     },
     created() {
-      let recruitId = this.$route.query.recruitId;
-      let param = {
-        'url': '/TutorWebsite/RecruitInfo/recruitDetailInfo.do',
-        'recruitId': recruitId
-      };
-      this.$http.post(param.url, param, {emulateJSON: true}).then(response => {
-        if (response.body.code === '0000') {
-          this.detail = response.body.data;
-          console.log(this.detail);
-        }
-      });
+      this._getRecruitDetail();
+    },
+    methods: {
+      _getRecruitDetail() {
+        let recruitId = this.$route.query.recruitId;
+        recruitDetail(recruitId).then(response => {
+          response = response.data;
+          if (response.code === ERR_OK) {
+            this.detail = response.data;
+          }
+        }).catch(error => {
+          console.log(error);
+        });
+      }
     }
   };
 </script>

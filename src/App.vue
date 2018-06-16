@@ -32,6 +32,12 @@
           <span>我的</span>
         </router-link>
       </div>
+      <!-- <div class="nav-item">
+        <router-link to="/test">
+          <i class="item-icon icon-mine"></i>
+          <span>测试</span>
+        </router-link>
+      </div> -->
     </div>
   </div>
 </template>

@@ -1,9 +1,15 @@
 <template>
   <div class="recruit">
-    <div class="header">123</div>
-    <div class="content">
-      <ul>
-        <li v-for="(recruit,index) in recruitList" :key="index" class="recruit-item">
+    <div class="header">家教招聘</div>
+    <scroll-pull ref="refresh"
+      class="recruitList-content"
+      :data="recruitInfoList"
+      :pulldown="pullDown"
+      :pullup="pullUp"
+      @pulldown="loadDown"
+      @scrollToEnd="loadUp">
+      <ul class="content">
+        <li v-for="(recruit,index) in recruitInfoList" :key="index" class="recruit-item">
           <router-link :to="{path:'/recruitdetail',query:{recruitId: recruit.recruitId}}">
             <div class="pic">
               <img src="static/images/head_pic2.jpg" alt="" >
@@ -27,30 +33,66 @@
           </router-link>
         </li>
       </ul>
-    </div>
+      <div v-show="!recruitInfoList.length" class="loading-container">
+        <loading></loading>
+      </div>
+    </scroll-pull>
   </div>
 </template>
 
 <script type='text/ecmascript-6'>
-  const ERR_OK = '0000';
+  import ScrollPull from 'base/scroll/scrollPull';
+  import Loading from 'base/loading/loading';
+  import {ERR_OK, recruitList} from 'api/index';
   export default {
     data() {
       return {
-        recruitList: {}
+        recruitInfoList: [],
+        pullDown: true,
+        pullUp: true,
+        curPage: 1
       };
     },
+    mounted() {
+      this._getRecruitList(1);
+    },
     created() {
-      let param = {
-        'url': '/TutorWebsite/RecruitInfo/recruitInfoList.do',
-        'currentPage': 1,
-        'pageSize': 10
-      };
-      this.$http.post(param.url, param, {emulateJSON: true}).then(response => {
-        response = response.body;
-        if (response.code === ERR_OK) {
-          this.recruitList = response.data;
-        }
-      });
+      // this._getRecruitList();
+    },
+    methods: {
+      loadDown() {
+        this.recruitInfoList = [];
+        this.$refs.refresh.$emit('down.finishload'); // 此处emit这个触发事件的前提是refresh这个dom加载完，否则会报emit为undefind
+        this._getRecruitList(1);
+      },
+      loadUp() {
+        if (!this.curPage) return;
+        this.curPage++;
+        this.$refs.refresh.$emit('pullup.reinit');
+        this._getRecruitList(this.curPage);
+      },
+      _getRecruitList(page) {
+        let param = {
+          'currentPage': page,
+          'pageSize': 10
+        };
+        recruitList(param).then(response => {
+          response = response.data;
+          if (response.code === ERR_OK) {
+            this.recruitInfoList = response.data.concat(this.recruitInfoList);
+            if (response.data.length >= param.pageSize) {
+              this.$refs.refresh.$emit('pullup.finishload');
+            } else {
+              // this.curPage = false;
+              this.$refs.refresh.$emit('pullup.loadeddone');
+            }
+          }
+        });
+      }
+    },
+    components: {
+      Loading,
+      ScrollPull
     }
   };
 </script>
@@ -63,10 +105,12 @@
       height 38px
       line-height 38px
       font-size 0
-  .content
+  .recruitList-content
     position relative
     width 100%
     font-size 0
+    height 588px
+    overflow hidden
     .recruit-item
       padding 10px
       box-sizing border-box
@@ -117,4 +161,9 @@
               margin-left -3px
         p
           line-height 15px
+    .loading-container
+      position absolute
+      width 100%
+      top 20%
+      transform: translateY(-50%)
 </style>
