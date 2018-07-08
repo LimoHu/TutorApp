@@ -100,7 +100,8 @@
           showLoding: false
         },
         isLoading: false,
-        isDone: false
+        isDone: false,
+        n: 0
       };
     },
     mounted() {
@@ -132,6 +133,7 @@
           this.scroll.on('scrollEnd', () => {
             // 滚动到底部（上拉加载更多）
             if (this.scroll.y <= (this.scroll.maxScrollY + 50)) {
+              console.log(this.scroll.maxScrollY);
               // 自定义上拉加载更多时初始化事件
               this.$on('pullup.reinit', () => {
                 this.isLoading = false;
@@ -187,7 +189,8 @@
       },
       loadDone() {
         setTimeout(() => {
-          console.log('down');
+          this.n++;
+          console.log(this.n);
           this.isLoading = false;
           this.isDone = true;
         }, 600);

@@ -77,16 +77,18 @@
           'pageSize': 10
         };
         recruitList(param).then(response => {
-          response = response.data;
-          if (response.code === ERR_OK) {
-            this.recruitInfoList = response.data.concat(this.recruitInfoList);
-            if (response.data.length >= param.pageSize) {
-              this.$refs.refresh.$emit('pullup.finishload');
-            } else {
-              // this.curPage = false;
-              this.$refs.refresh.$emit('pullup.loadeddone');
+          this.$nextTick(() => {
+            response = response.data;
+            if (response.code === ERR_OK) {
+              this.recruitInfoList = response.data.concat(this.recruitInfoList);
+              if (response.data.length >= param.pageSize) {
+                this.$refs.refresh.$emit('pullup.finishload');
+              } else {
+                // this.curPage = false;
+                this.$refs.refresh.$emit('pullup.loadeddone');
+              }
             }
-          }
+          });
         });
       }
     },

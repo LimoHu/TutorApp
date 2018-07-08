@@ -7,7 +7,7 @@ import tutor from 'components/tutor/tutor';
 import mine from 'components/mine/mine';
 import tutordetail from 'components/tutor/tutordetail';
 import recruitdetail from 'components/recruit/recruitdetail';
-import scrollNew from 'components/home/scrollNew';
+import login from 'components/login/login';
 
 Vue.use(Router);
 
@@ -42,8 +42,8 @@ const routes = [{
   path: '/recruitdetail',
   component: recruitdetail
 }, {
-  path: '/test',
-  component: scrollNew
+  path: '/login',
+  component: login
 }];
 
 // 实例化一个router

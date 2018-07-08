@@ -32,12 +32,12 @@
           <span>我的</span>
         </router-link>
       </div>
-      <!-- <div class="nav-item">
-        <router-link to="/test">
+      <div class="nav-item">
+        <router-link to="/login">
           <i class="item-icon icon-mine"></i>
-          <span>测试</span>
+          <span>登陆</span>
         </router-link>
-      </div> -->
+      </div>
     </div>
   </div>
 </template>
@@ -58,7 +58,8 @@ export default {
     width: 100%
     height: 40px
     margin: 50px auto 0
-    background #f3f5f7
+    /* background #f3f5f7 */
+    background #0c9
     border-top 1px solid rgba(7,17,27,0.1)
     overflow: hidden;
     .nav-item
@@ -80,5 +81,6 @@ export default {
           span
             font-size 10px
         &.active
-          color: #00CC99
+          /* color: #00CC99 */
+          color #ffffff
 </style>
