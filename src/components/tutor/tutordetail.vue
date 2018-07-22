@@ -100,6 +100,7 @@
 <script type='text/ecmascript-6'>
   import star from 'components/star/star.vue';
   import {ERR_OK, tutorDetail} from 'api/index';
+  import {mapGetters} from 'vuex';
   export default {
     data() {
       return {
@@ -112,11 +113,13 @@
       };
     },
     created() {
+      console.log(this.tutor);
       this._getTutorDetail();
     },
     methods: {
       _getTutorDetail() {
-        let userId = this.$route.params.userId;
+        // let userId = this.$route.params.userId;
+        let userId = this.tutor.userId;
         tutorDetail(userId).then(response => {
           response = response.data;
           if (response.code === ERR_OK) {
@@ -126,6 +129,11 @@
           console.log(error);
         });
       }
+    },
+    computed: {
+      ...mapGetters([
+        'tutor'
+      ])
     },
     components: {
       star

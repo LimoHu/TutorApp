@@ -3,6 +3,9 @@
 import Vue from 'vue';
 import App from './App';
 import router from './router/index.js';
+
+import store from './store';
+
 import VueAwesomeSwiper from 'vue-awesome-swiper';
 import 'swiper/dist/css/swiper.css';
 import 'common/stylus/index.styl';
@@ -13,5 +16,6 @@ Vue.use(VueAwesomeSwiper);
 new Vue({
   el: '#app',
   router,
+  store,
   render: h => h(App) // 让我们可以通过JavaScript的方式去初始化一个模板,吧APP组件传入然后就可以去渲染 app 组件
 });

@@ -12,7 +12,7 @@
       @pulldown="loadDown"
       @scrollToEnd="loadUp">
       <ul class="content">
-        <li v-for="(tutor,index) in tutorInfoList" :key="index" class="tutor-item" @click="selectTutor(tutor.userId,$event)">
+        <li v-for="(tutor,index) in tutorInfoList" :key="index" class="tutor-item" @click="selectTutor(tutor,$event)">
           <div class="pic">
             <img src="static/images/head_pic1.jpg" alt="" >
           </div>
@@ -48,6 +48,7 @@
   import Loading from 'base/loading/loading';
   import {ERR_OK, tutorList} from 'api/index';
   import ScrollPull from 'base/scroll/scrollPull';
+  import {mapMutations} from 'vuex';
 
   export default {
     data() {
@@ -60,15 +61,14 @@
     },
     mounted() {
       this.loadDown();
-      let timeTest = '2018-07-31 00:00:00';
-      this._getWeekOfYear(timeTest);
     },
     methods: {
-      selectTutor(id, event) {
+      selectTutor(tutor, event) {
         if (!event._constructed) return;
         this.$router.push({
-          path: `/tutor/${id}`
+          path: `/tutor/${tutor.userId}`
         });
+        this.setTutor(tutor);
       },
       loadDown() {
         this.tutorInfoList = [];
@@ -100,19 +100,9 @@
           }
         });
       },
-      _getWeekOfYear(test) {
-        let today = new Date(test);
-        let firstDay = new Date(today.getFullYear(), 0, 1);
-        let dayOfWeek = firstDay.getDay();
-        let spendDay = 1;
-        if (dayOfWeek !== 0) {
-          spendDay = 7 - dayOfWeek + 1;
-        }
-        firstDay = new Date(today.getFullYear(), 0, 1 + spendDay);
-        let d = Math.ceil((today.valueOf() - firstDay.valueOf()) / 86400000);
-        let result = Math.ceil(d / 7);
-        console.log(result + 1);
-      }
+      ...mapMutations({
+        setTutor: 'SET_TUTOR'
+      })
     },
     components: {
       Star,
